@@ -4,19 +4,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class User {
+import java.time.LocalDate;
+import java.util.List;
+
+public class User implements Comparable<User> {
     private final String userId;
     private final String firstName;
     private final String lastName;
     private final String email;
     private final String phoneNumber;
-    private final Date birthDate;
+    private final LocalDate birthDate;  // Використовуємо LocalDate замість Date
     private final String locationUser;
     private final List<Photo> photos;
     private final List<History> historyList;
 
-    public User(String userId, String firstName, String lastName, String email,
-                String phoneNumber, Date birthDate, String locationUser, List<Photo> photos, List<History> historyList) {
+    private User(String userId, String firstName, String lastName, String email,
+                 String phoneNumber, LocalDate birthDate, String locationUser,
+                 List<Photo> photos, List<History> historyList) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,18 +32,68 @@ public class User {
         this.historyList = historyList;
     }
 
-    // Додамо геттер для birthDate
-    public Date getBirthDate() {
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public LocalDate getBirthDate() {  // Повертає LocalDate
         return birthDate;
     }
 
+    public String getLocationUser() {
+        return locationUser;
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public List<History> getHistoryList() {
+        return historyList;
+    }
+
+    @Override
+    public int compareTo(User other) {
+        return this.birthDate.compareTo(other.birthDate);  // Порівняння LocalDate
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", birthDate=" + birthDate +
+                ", locationUser='" + locationUser + '\'' +
+                '}';
+    }
+
     public static class Builder {
-        private final String userId;
+        private final String userId;  // Обов'язкове поле
         private String firstName;
         private String lastName;
         private String email;
         private String phoneNumber;
-        private Date birthDate;
+        private LocalDate birthDate;  // Використовуємо LocalDate замість Date
         private String locationUser;
         private List<Photo> photos;
         private List<History> historyList;
@@ -68,7 +122,7 @@ public class User {
             return this;
         }
 
-        public Builder withBirthDate(Date birthDate) {
+        public Builder withBirthDate(LocalDate birthDate) {  // Параметр типу LocalDate
             this.birthDate = birthDate;
             return this;
         }
@@ -89,41 +143,8 @@ public class User {
         }
 
         public User build() {
-            return new User(userId, firstName, lastName, email, phoneNumber, birthDate, locationUser, photos, historyList);
+            return new User(userId, firstName, lastName, email, phoneNumber,
+                    birthDate, locationUser, photos, historyList);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId='" + userId + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", birthDate=" + birthDate +
-                ", locationUser='" + locationUser + '\'' +
-                ", photos=" + photos +
-                ", historyList=" + historyList +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return userId.equals(user.userId) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(phoneNumber, user.phoneNumber) &&
-                Objects.equals(birthDate, user.birthDate) &&
-                Objects.equals(locationUser, user.locationUser);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, firstName, lastName, email, phoneNumber, birthDate, locationUser);
     }
 }
